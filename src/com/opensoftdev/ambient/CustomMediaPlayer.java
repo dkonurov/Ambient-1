@@ -22,10 +22,10 @@ public class CustomMediaPlayer implements OnPreparedListener {
 	//final private Integer id;
 	public MediaPlayer mediaPlayer;
 	
-	CustomMediaPlayer(Context Context, int Id) {
-		context = Context;
+	CustomMediaPlayer(Context _context, int Id) {
+		context = _context;
 		mediaPlayer = new MediaPlayer();
-		AssetFileDescriptor afd = Context.getResources().openRawResourceFd(Id);
+		AssetFileDescriptor afd = context.getResources().openRawResourceFd(Id);
 		try {
 			mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 		} catch (IllegalArgumentException e) {
