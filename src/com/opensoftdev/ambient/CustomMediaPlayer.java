@@ -4,12 +4,14 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 public class CustomMediaPlayer implements OnPreparedListener {
 	
@@ -20,10 +22,7 @@ public class CustomMediaPlayer implements OnPreparedListener {
 	//final private Integer id;
 	public MediaPlayer mediaPlayer;
 	
-	CustomMediaPlayer(Context Context, int Id, View v) {
-		button = v;
-		//id = v.getId();
-		//bar = Bar;
+	CustomMediaPlayer(Context Context, int Id) {
 		context = Context;
 		mediaPlayer = new MediaPlayer();
 		AssetFileDescriptor afd = Context.getResources().openRawResourceFd(Id);
@@ -39,20 +38,6 @@ public class CustomMediaPlayer implements OnPreparedListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		v.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				if (mediaPlayer.isPlaying()) {
-					mediaPlayer.pause();
-					mediaPlayer.seekTo(NULL);
-				} else {
-					mediaPlayer.start();
-				}
-			}
-			
-		});
 		//resetVolume();
 		/*Bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -80,9 +65,54 @@ public class CustomMediaPlayer implements OnPreparedListener {
 		mediaPlayer.setOnPreparedListener(this);
 		mediaPlayer.prepareAsync();
 		
+		mediaPlayer.setVolume(0.5f, 0.5f);
 		mediaPlayer.setLooping(true);
 		
 		
+	}
+	
+	public void setView(final TextView v){
+		v.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if (mediaPlayer.isPlaying()) {
+					mediaPlayer.pause();
+					mediaPlayer.seekTo(NULL);
+					v.setTextColor(Color.BLACK);
+				} else {
+					mediaPlayer.start();
+					v.setTextColor(Color.GREEN);
+				}
+			}
+			
+		});
+	}
+	
+	public void setSeekBar(SeekBar bar) {
+		bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+			@Override
+			public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
+				// TODO Auto-generated method stub
+				float volume = (float) arg1/100;
+				mediaPlayer.setVolume(volume, volume);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 	}
 
 	@Override

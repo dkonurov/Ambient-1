@@ -42,13 +42,15 @@ public class MainListAdapter extends BaseAdapter {
         view = inflater.inflate(R.layout.main_listview_fragment, null);
 		
 		TextView tv = (TextView) view.findViewById(R.id.track_name);
+		CustomMediaPlayer player;
 		if (position == 0) {
-			CustomMediaPlayer player = new CustomMediaPlayer(context,R.raw.do_neba, tv);
+			player = new CustomMediaPlayer(context,R.raw.do_neba);
 		} else if (position == 1) {
-			CustomMediaPlayer player = new CustomMediaPlayer(context,R.raw.comin_in_hot, tv);
+			player = new CustomMediaPlayer(context,R.raw.comin_in_hot);
 		} else {
-			CustomMediaPlayer player = new CustomMediaPlayer(context,R.raw.coming_back_down, tv);
+			player = new CustomMediaPlayer(context,R.raw.coming_back_down);
 		}
+		player.setView(tv);
 		tv.setText(data[position]);
 		return view;
 	}
