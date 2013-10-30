@@ -4,28 +4,25 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
 
 public class CustomMediaPlayer implements OnPreparedListener {
 	
-	private View button;
 	private Context context;
 	static final private Integer NULL = 0;
 	private SeekBar bar;
-	//final private Integer id;
 	public MediaPlayer mediaPlayer;
+	public int number;
+	public int volume = -1;
 	
-	CustomMediaPlayer(Context _context, int Id) {
-		context = _context;
+	CustomMediaPlayer(Context _сontext, int _id, int _number) {
+		context = _сontext;
+		number = _number;
 		mediaPlayer = new MediaPlayer();
-		AssetFileDescriptor afd = context.getResources().openRawResourceFd(Id);
+		
+		AssetFileDescriptor afd = context.getResources().openRawResourceFd(_id);
 		try {
 			mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 		} catch (IllegalArgumentException e) {
@@ -38,30 +35,7 @@ public class CustomMediaPlayer implements OnPreparedListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//resetVolume();
-		/*Bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-			@Override
-			public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-				// TODO Auto-generated method stub
-				float volume = (float) arg1/100;
-				mediaPlayer.setVolume(volume, volume);
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		*/
+		
 		mediaPlayer.setOnPreparedListener(this);
 		mediaPlayer.prepareAsync();
 		
@@ -70,50 +44,6 @@ public class CustomMediaPlayer implements OnPreparedListener {
 		
 		
 	}
-	
-	public void setView(final TextView v){
-		v.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				if (mediaPlayer.isPlaying()) {
-					mediaPlayer.pause();
-					mediaPlayer.seekTo(NULL);
-					v.setTextColor(Color.BLACK);
-				} else {
-					mediaPlayer.start();
-					v.setTextColor(Color.GREEN);
-				}
-			}
-			
-		});
-	}
-	
-	public void setSeekBar(SeekBar bar) {
-		bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-			@Override
-			public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-				// TODO Auto-generated method stub
-				float volume = (float) arg1/100;
-				mediaPlayer.setVolume(volume, volume);
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-	}
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
@@ -121,9 +51,49 @@ public class CustomMediaPlayer implements OnPreparedListener {
 		
 	}
 	
-	public void resetVolume() {
-		mediaPlayer.setVolume(0.5f, 0.5f);
-		bar.setProgress(50);
+	public void start() {
+		mediaPlayer.start();
+	}
+	
+	public void stop() {
+		mediaPlayer.pause();
+		mediaPlayer.seekTo(NULL);
+	}
+	
+	public boolean isPlaying() {
+		return mediaPlayer.isPlaying();
+	}
+	
+	public int getNumber() {
+		return number;
+	}
+	
+	public void setNumber(int _number) {
+		number = _number;
+	}
+	
+	public void setVolume(float _volume) {
+		volume = (int) (_volume*100);
+		mediaPlayer.setVolume(_volume, _volume);
+	}
+	
+	public void Destroy() {
+		if (mediaPlayer != null) {
+			try {
+				mediaPlayer.release();
+				mediaPlayer = null;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public int getVolume() {
+		if (volume != -1) {
+			return volume;
+		} else {
+			return 50;
+		}
 	}
 
 }
