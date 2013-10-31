@@ -1,9 +1,13 @@
 package com.opensoftdev.ambient;
 
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.SyncStateContract.Constants;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -24,11 +28,12 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	private int openedView = -1;
 	
+	private ConteinerMediaPlayer conteiner;
+	
 	Animation anim;
 	
 	/** Buttons **/
-	private Button settings, playLists;
-	
+	private Button settings, playLists, playAndStop;
 	private TextView currentPlayList;
 	
 	String data[] = {"8=э", "8==э", "8===э", "8====э"};
@@ -42,14 +47,17 @@ public class MainActivity extends Activity implements OnClickListener {
         settings = (Button) findViewById(R.id.settings);
         playLists = (Button) findViewById(R.id.play_lists);
         currentPlayList = (TextView) findViewById(R.id.list_name);
+        playAndStop = (Button) findViewById(R.id.buttonPress);
         
         settings.setOnClickListener(this);
         playLists.setOnClickListener(this);
+        playAndStop.setOnClickListener(this);
         
         mainList = (ExpandableListView) findViewById(R.id.main_list);
         mainListAdapter = new MainListAdapter(this, data);
         mainList.setAdapter(mainListAdapter);
         mainList.setGroupIndicator(null);
+        
 
         
         anim = AnimationUtils.loadAnimation(this, R.anim.down_up);
@@ -82,9 +90,13 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		Intent activity;
+		conteiner = MainListAdapter.getConteiner();
+		startService(new Intent(this, ConteinerMediaPlayer.class));
 		switch (v.getId()){
 		case R.id.settings:
 			activity = new Intent(this, SettingsActivity.class);
+			ArrayList <ConteinerMediaPlayer> myList = new ArrayList <ConteinerMediaPlayer> ();
+			myList.add(conteiner);
 			startActivity(activity);
 			overridePendingTransition(R.anim.down_up, R.anim.none);
 			break;
@@ -93,6 +105,9 @@ public class MainActivity extends Activity implements OnClickListener {
 			startActivity(activity);
 			overridePendingTransition(R.anim.left_right, R.anim.none);
 			break;
+		case R.id.buttonPress:
+			conteiner = MainListAdapter.getConteiner();
+			conteiner.playingAndStop(!conteiner.isPlaying());
 		}
 	}
     

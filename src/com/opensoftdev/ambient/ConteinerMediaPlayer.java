@@ -11,7 +11,11 @@ package com.opensoftdev.ambient;
 
 import java.util.ArrayList;
 
+import android.app.Service;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Binder;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,18 +25,27 @@ import android.widget.TextView;
 
 
 
-public class ConteinerMediaPlayer {
+public class ConteinerMediaPlayer extends Service {
 	
 	private ArrayList <CustomMediaPlayer> conteinerMediaPlayer = new ArrayList <CustomMediaPlayer> ();
 	private ArrayList <TextView> conteinerTextView = new ArrayList <TextView> ();
 	private ArrayList <SeekBar> conteinerSeekBar = new ArrayList <SeekBar> ();
 	private int select;
 	private int lastPlayer;
-	private boolean mSetMulti = false;
+	private ArrayList <Integer> isPlaying = new ArrayList <Integer> ();
+	private boolean mSetMulti = true;
+	private final IBinder mBinder = new LocalBinder();
+	
+	public class LocalBinder extends Binder {
+        ConteinerMediaPlayer getService() {
+            return ConteinerMediaPlayer.this;
+        }
+    }
 	
 	ConteinerMediaPlayer(){
 		select = 0;
 		lastPlayer = 0;
+		super.onCreate();
 	}
 
 	
@@ -61,6 +74,12 @@ public class ConteinerMediaPlayer {
 				// TODO Auto-generated method stub
 				if (conteinerMediaPlayer.get(id).isPlaying()) {
 					conteinerMediaPlayer.get(id).stop();
+					for (int i = 0, length = isPlaying.size(); i < length; i++) {
+						if (isPlaying.get(i) == id) {
+							isPlaying.remove(i);
+							break;
+						}
+					}
 					textview.setTextColor(Color.BLACK);
 				} else {
 					if (!mSetMulti) {
@@ -71,6 +90,7 @@ public class ConteinerMediaPlayer {
 					}
 					conteinerMediaPlayer.get(id).start();
 					lastPlayer = conteinerMediaPlayer.get(id).getNumber();
+					isPlaying.add(lastPlayer);
 					textview.setTextColor(Color.GREEN);
 				}
 			}
@@ -142,6 +162,61 @@ public class ConteinerMediaPlayer {
 		else {
 			return true;
 		}
+	}
+	
+	public void playingAndStop(boolean check) {
+		if (!mSetMulti) {
+			if (check) {
+				conteinerMediaPlayer.get(lastPlayer).start();
+				conteinerTextView.get(lastPlayer).setTextColor(Color.GREEN);
+			} else {
+				conteinerMediaPlayer.get(lastPlayer).stop();
+				conteinerTextView.get(lastPlayer).setTextColor(Color.BLACK);
+			}
+		} else {
+			if (check) {
+				for (int i = 0, length = isPlaying.size(); i < length; i++) {
+					conteinerMediaPlayer.get(isPlaying.get(i)).start();
+					conteinerTextView.get(isPlaying.get(i)).setTextColor(Color.GREEN);
+				}
+			} else {
+				for (int i = 0, length = isPlaying.size(); i < length; i++) {
+					conteinerMediaPlayer.get(isPlaying.get(i)).stop();
+					conteinerTextView.get(isPlaying.get(i)).setTextColor(Color.BLACK);
+				}
+			}
+		}
+	}
+	
+	public boolean isPlaying() {
+		if (!mSetMulti) {
+			return conteinerMediaPlayer.get(lastPlayer).isPlaying();
+		} else {
+			for (int i = 0; i < select; i++) {
+				if (conteinerMediaPlayer.get(i).isPlaying()) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	public String getString() {
+		return null;
+		
+	}
+
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+		// TODO Auto-generated method stub
+		return mBinder;
+	}
+
+
+	public ConteinerMediaPlayer getService() {
+		// TODO Auto-generated method stub
+		return this;
 	}
 			
 }

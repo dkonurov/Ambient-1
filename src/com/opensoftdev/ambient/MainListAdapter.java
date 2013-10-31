@@ -1,6 +1,7 @@
 package com.opensoftdev.ambient;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ public class MainListAdapter extends BaseExpandableListAdapter {
 	private int lastPosition;
 	private Button buttons[];
 	private int select = 0;
-	private ConteinerMediaPlayer conteiner = new ConteinerMediaPlayer();
+	private static ConteinerMediaPlayer conteiner = new ConteinerMediaPlayer();
 	
 	MainListAdapter(Context c, String[] data){
 		this.context = c;
@@ -115,6 +116,10 @@ public class MainListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
+	}
+	
+	public static ConteinerMediaPlayer getConteiner() {
+		return conteiner;
 	}
 
 }
