@@ -1,17 +1,20 @@
 package com.opensoftdev.ambient;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
 
@@ -21,6 +24,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	private int openedView = -1;
 	
+	Animation anim;
+	
 	/** Buttons **/
 	private Button settings, playLists;
 	
@@ -28,7 +33,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	String data[] = {"8=э", "8==э", "8===э", "8====э"};
 	
-    @Override
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
@@ -36,6 +41,7 @@ public class MainActivity extends Activity implements OnClickListener {
         
         settings = (Button) findViewById(R.id.settings);
         playLists = (Button) findViewById(R.id.play_lists);
+        currentPlayList = (TextView) findViewById(R.id.list_name);
         
         settings.setOnClickListener(this);
         playLists.setOnClickListener(this);
@@ -44,15 +50,17 @@ public class MainActivity extends Activity implements OnClickListener {
         mainListAdapter = new MainListAdapter(this, data);
         mainList.setAdapter(mainListAdapter);
         mainList.setGroupIndicator(null);
+
+        
+        anim = AnimationUtils.loadAnimation(this, R.anim.down_up);
         
         mainList.setOnGroupClickListener(new OnGroupClickListener() {
 
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v,
 					int groupPosition, long id) {
-				TextView text = (TextView) v.findViewById(R.id.expand);
-				Drawable shape = getApplicationContext().getResources().getDrawable(R.drawable.up);
-				text.setBackgroundDrawable(shape);
+				
+				
 				return false;
 			}
         	
@@ -66,19 +74,24 @@ public class MainActivity extends Activity implements OnClickListener {
 					mainList.collapseGroup(openedView);
 				}
 				openedView = groupPosition;
+				
 			}
         });
     }
 
 	@Override
 	public void onClick(View v) {
+		Intent activity;
 		switch (v.getId()){
 		case R.id.settings:
-			Intent settingsActivity = new Intent(this, SettingsActivity.class);
-			startActivity(settingsActivity);
+			activity = new Intent(this, SettingsActivity.class);
+			startActivity(activity);
 			overridePendingTransition(R.anim.down_up, R.anim.none);
 			break;
 		case R.id.play_lists:
+			activity = new Intent(this, PlayListsActivity.class);
+			startActivity(activity);
+			overridePendingTransition(R.anim.left_right, R.anim.none);
 			break;
 		}
 	}
