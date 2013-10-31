@@ -20,6 +20,7 @@ public class MainListAdapter extends BaseExpandableListAdapter {
 	private int lastPosition;
 	private Button buttons[];
 	private int select = 0;
+	private ConteinerMediaPlayer conteiner = new ConteinerMediaPlayer();
 	
 	MainListAdapter(Context c, String[] data){
 		this.context = c;
@@ -47,30 +48,8 @@ public class MainListAdapter extends BaseExpandableListAdapter {
         view = inflater.inflate(R.layout.main_list_seek_bar, null);
         
         SeekBar trackVolume = (SeekBar) view.findViewById(R.id.track_volume);
-        trackVolume.setProgress(50);
         
-        trackVolume.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				Toast.makeText(context, "ZBS", 1000).show();				
-			}
-        	
-        });
-
+        conteiner.setSeekBar(groupPosition, trackVolume);
 		return view;
 	}
 
@@ -108,13 +87,22 @@ public class MainListAdapter extends BaseExpandableListAdapter {
         TextView expand = (TextView) view.findViewById(R.id.expand);
         Drawable shape = context.getResources().getDrawable(R.drawable.down);
         expand.setBackgroundDrawable(shape);
-        tv.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(context, "asd", 50).show();
-			}
-        });
+        
+        if (!conteiner.isSet(groupPosition)) {
+        	CustomMediaPlayer player;
+        	if(groupPosition == 0) {
+        		player = new CustomMediaPlayer(context, R.raw.comin_in_hot, groupPosition);
+        		conteiner.addView(player);
+        	} else if (groupPosition == 1) {
+        		player = new CustomMediaPlayer(context, R.raw.coming_back_down, groupPosition);
+        		conteiner.addView(player);
+        	} else {
+        		player = new CustomMediaPlayer(context, R.raw.do_neba, groupPosition);
+        		conteiner.addView(player);
+        	}
+        }
+        
+        conteiner.setTextView(tv, groupPosition);
 
 		return view;
 	}
