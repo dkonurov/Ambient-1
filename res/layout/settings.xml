@@ -47,7 +47,69 @@
 
 	</LinearLayout>
 	
+    <RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
     
+        <TextView
+            android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_centerVertical="true"
+	    	android:text="Автосмена фона"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"/>
+
+	</RelativeLayout>
+	
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+    
+        <TextView
+            android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:text="Неведомая хрень покачто"/>
+
+	</LinearLayout>
+	
+    
+    <RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+    
+        <TextView
+            android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_centerVertical="true"
+	    	android:text="Не выключать экран"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"/>
+
+	</RelativeLayout>
+	
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+    
+        <TextView
+            android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:text="Какие мы ахуенные
+	    	"/>
+
+	</LinearLayout>
 	
     
 

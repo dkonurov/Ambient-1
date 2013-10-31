@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SettingsAnimation">
+        <item name="android:windowExitAnimation">@anim/up_down</item>
+    </style>
+</resources>
