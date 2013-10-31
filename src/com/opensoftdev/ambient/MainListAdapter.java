@@ -5,15 +5,12 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.TranslateAnimation;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class MainListAdapter extends BaseExpandableListAdapter {
+public class MainListAdapter extends BaseAdapter {
 	
 	private Context context;
 	private String[] data;
@@ -29,92 +26,32 @@ public class MainListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public Object getChild(int groupPosition, int childPosition) {
-		return null;
-	}
-
-	@Override
-	public long getChildId(int groupPosition, int childPosition) {
-		return 0;
-	}
-
-	@Override
-	public View getChildView(int groupPosition, int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {
-		View view = convertView;
-		
-		LayoutInflater inflater;
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.main_list_seek_bar, null);
-        
-        SeekBar trackVolume = (SeekBar) view.findViewById(R.id.track_volume);
-        
-        conteiner.setSeekBar(groupPosition, trackVolume);
-		return view;
-	}
-
-	@Override
-	public int getChildrenCount(int groupPosition) {
-		return 1;
-	}
-
-	@Override
-	public Object getGroup(int groupPosition) {
-		return null;
-	}
-
-	@Override
-	public int getGroupCount() {
+	public int getCount() {
 		return data.length;
 	}
 
 	@Override
-	public long getGroupId(int groupPosition) {
-		return groupPosition;
+	public Object getItem(int position) {
+		return null;
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded,
-			View convertView, ViewGroup parent) {
-		View view = convertView;
-		
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View view, ViewGroup parent) {
 		LayoutInflater inflater;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.main_listview_fragment, null);
         
         final TextView tv = (TextView) view.findViewById(R.id.track_name);
-        tv.setText(data[groupPosition]);
+        tv.setText(data[position]);
         TextView expand = (TextView) view.findViewById(R.id.expand);
         Drawable shape = context.getResources().getDrawable(R.drawable.down);
         expand.setBackgroundDrawable(shape);
-        
-        if (!conteiner.isSet(groupPosition)) {
-        	CustomMediaPlayer player;
-        	if(groupPosition == 0) {
-        		player = new CustomMediaPlayer(context, R.raw.comin_in_hot, groupPosition);
-        		conteiner.addView(player);
-        	} else if (groupPosition == 1) {
-        		player = new CustomMediaPlayer(context, R.raw.coming_back_down, groupPosition);
-        		conteiner.addView(player);
-        	} else {
-        		player = new CustomMediaPlayer(context, R.raw.do_neba, groupPosition);
-        		conteiner.addView(player);
-        	}
-        }
-        
-        conteiner.setTextView(tv, groupPosition);
-
 		return view;
-	}
-
-	@Override
-	public boolean hasStableIds() {
-		return false;
-	}
-
-	@Override
-	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		return true;
 	}
 
 }

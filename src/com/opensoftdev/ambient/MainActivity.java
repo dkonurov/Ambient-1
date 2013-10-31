@@ -1,6 +1,5 @@
 package com.opensoftdev.ambient;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,19 +7,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.agimind.widget.ExpandableAdapter;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-	private ExpandableListView mainList;
+	private ListView mainList;
 	
-	private MainListAdapter mainListAdapter;
+	private MainListAdapter adapter;
 	
 	private int openedView = -1;
 	
@@ -46,37 +44,12 @@ public class MainActivity extends Activity implements OnClickListener {
         settings.setOnClickListener(this);
         playLists.setOnClickListener(this);
         
-        mainList = (ExpandableListView) findViewById(R.id.main_list);
-        mainListAdapter = new MainListAdapter(this, data);
-        mainList.setAdapter(mainListAdapter);
-        mainList.setGroupIndicator(null);
-
+        mainList = (ListView) findViewById(R.id.main_list);
+        adapter = new MainListAdapter(this, data);
         
-        anim = AnimationUtils.loadAnimation(this, R.anim.down_up);
+        ListAdapter listAdapter = new ExpandableAdapter(this, adapter, R.id.expand, R.id.track_volume);
+        mainList.setAdapter(listAdapter);
         
-        mainList.setOnGroupClickListener(new OnGroupClickListener() {
-
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v,
-					int groupPosition, long id) {
-				
-				
-				return false;
-			}
-        	
-        });
-        mainList.setOnGroupExpandListener(new OnGroupExpandListener() {
-
-			@Override
-			public void onGroupExpand(int groupPosition) {
-				
-				if (openedView != groupPosition && openedView != -1) {
-					mainList.collapseGroup(openedView);
-				}
-				openedView = groupPosition;
-				
-			}
-        });
     }
 
 	@Override
