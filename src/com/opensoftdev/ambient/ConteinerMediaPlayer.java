@@ -121,6 +121,7 @@ public class ConteinerMediaPlayer {
 	}
 	
 	public void setSeekBar(final int id, SeekBar _bar) {
+		conteinerSeekBar.add(_bar);
 		_bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override

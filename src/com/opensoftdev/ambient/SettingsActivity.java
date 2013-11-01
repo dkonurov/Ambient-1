@@ -1,32 +1,35 @@
 package com.opensoftdev.ambient;
 
-import java.util.List;
-
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.Service;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.ToggleButton;
+import android.app.Dialog;
+import android.content.DialogInterface;
 
 public class SettingsActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 	
 	private Button closeSettings;
 	private ToggleButton setMulti;
+	private ToggleButton autoLock;
+	
+	public DialogInterface.OnClickListener dialogClickListener;
+	
 	public ConteinerMediaPlayer conteiner = MainActivity.conteiner;
-	private Service service;
-	private Intent intent;
+	
+	private PowerManager powerManager;
+	private WakeLock wakeLock;
 	
 	protected void onCreate(Bundle savedState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -41,8 +44,31 @@ public class SettingsActivity extends Activity implements OnClickListener, OnChe
 		setMulti.setChecked(conteiner.getMulti());
 		setMulti.setOnCheckedChangeListener(this);
 		
+		autoLock = (ToggleButton) findViewById(R.id.auto_lock);
+		autoLock.setChecked(false);
+		autoLock.setOnCheckedChangeListener(this);
+		
+		powerManager = (PowerManager)this.getSystemService(this.POWER_SERVICE);
+		wakeLock = powerManager.newWakeLock(powerManager.FULL_WAKE_LOCK, "AmbientLock");
+		
 		LinearLayout resetVolume = (LinearLayout) findViewById(R.id.resetVolume);
 		resetVolume.setOnClickListener(this);
+		
+		dialogClickListener = new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				switch (which) {
+				case Dialog.BUTTON_POSITIVE:
+					conteiner.resetVolume();
+					dialog.cancel();
+					break;
+				case Dialog.BUTTON_NEGATIVE:
+					dialog.cancel();
+				}
+			}
+		};
 		
 	}
 
@@ -53,7 +79,7 @@ public class SettingsActivity extends Activity implements OnClickListener, OnChe
 			finish();
 			break;
 		case R.id.resetVolume:
-			conteiner.resetVolume();
+			showDialog(0);
 			break;
 		}
 		
@@ -69,7 +95,22 @@ public class SettingsActivity extends Activity implements OnClickListener, OnChe
 				} else {
 					conteiner.offMulti();
 				}
+			case R.id.auto_lock:
+				if (autoLock.isChecked()) {
+					wakeLock.acquire();
+				} else {
+					wakeLock.release();				
+				}
 		}
+	}
+	
+	protected Dialog onCreateDialog(int id) {
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setTitle("Do you want realy?");
+		adb.setMessage("Do you want realy?");
+		adb.setPositiveButton("yes", dialogClickListener);
+		adb.setNegativeButton("no", dialogClickListener);
+		return adb.create();
 	}
 	
 }

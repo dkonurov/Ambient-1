@@ -104,7 +104,7 @@
 	    	android:text="Prevent auto lock:"/>
 
         <ToggleButton
-            android:id="@+id/toggleButton3"
+            android:id="@+id/auto_lock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"/>
