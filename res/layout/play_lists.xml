@@ -15,6 +15,16 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"/>
         
+        <Button android:id="@+id/edit_play_lists"
+            android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="edit"
+	        android:layout_alignParentRight="true" />
+        
     </RelativeLayout>
-
+    
+    <ListView android:id="@+id/play_lists_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    
 </LinearLayout>

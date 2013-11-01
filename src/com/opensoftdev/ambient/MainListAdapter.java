@@ -6,23 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainListAdapter extends BaseAdapter {
 	
 	private Context context;
 	private String[] data;
-	private int lastPosition;
-	private Button buttons[];
-	private int select = 0;
 	private ConteinerMediaPlayer conteiner = new ConteinerMediaPlayer();
 	
 	MainListAdapter(Context c, String[] data){
 		this.context = c;
 		this.data = data;
-		buttons = new Button[data.length];
 	}
 
 	@Override
