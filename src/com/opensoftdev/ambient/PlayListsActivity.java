@@ -1,29 +1,32 @@
 package com.opensoftdev.ambient;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PlayListsActivity extends Activity implements OnClickListener, OnItemClickListener {
 	
 	private Button closePlayLists, editPlayLists;
 	
-	private String[] data = {"asd", "zxc", "qwe", "iop"};
+	private ArrayList<String> data = new ArrayList<String>();
 	
 	private boolean isFirstClick = true;
 	
-	PlayListsAdapter adapterNotEditable;
+	
+	
+	PlayListsAdapter adapterNotEditable, adapterEditable;
 	ListView playLists;
 	
 	protected void onCreate(Bundle savedState) {
@@ -31,6 +34,12 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 		super.onCreate(savedState);
 		setContentView(R.layout.play_lists);
 		getWindow().getAttributes().windowAnimations = R.style.PlayListsAnimation;
+		
+		data.add("asd1");
+		data.add("asd2");
+		data.add("asd3");
+		data.add("asd4");
+		data.add("asd5");
 		
 		closePlayLists = (Button) findViewById(R.id.close_play_lists);
 		closePlayLists.setOnClickListener(this);
@@ -43,7 +52,7 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 		adapterNotEditable = new PlayListsAdapter(this, data, false);
 
 		playLists.setAdapter(adapterNotEditable);
-		playLists.setOnItemClickListener(this);
+		playLists.setOnItemClickListener(null);
 
 	}
 
@@ -56,14 +65,15 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 		case R.id.edit_play_lists:
 			if (isFirstClick) {
 				editPlayLists.setText("done");			
-				PlayListsAdapter adapter = new PlayListsAdapter(this, data, true);
-				playLists.setAdapter(adapter);
+				adapterEditable = new PlayListsAdapter(this, data, true);
+				playLists.setAdapter(adapterEditable);
 				playLists.setOnItemClickListener(this);
 				isFirstClick = false;
 			} else {
-				editPlayLists.setText("edit");			
+				editPlayLists.setText("edit");
+				adapterNotEditable = new PlayListsAdapter(this, data, false);
 				playLists.setAdapter(adapterNotEditable);
-				playLists.setOnItemClickListener(this);
+				playLists.setOnItemClickListener(null);
 				isFirstClick = true;
 			}
 			
@@ -72,24 +82,34 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 	}
 	
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3) {
+	public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
 		TextView asd = (TextView) v.findViewById(R.id.play_list_name);
 		
-		v.setOnTouchListener(new OnTouchListener() {
+		TranslateAnimation anim = new TranslateAnimation(0,-v.getWidth(),0,0);
+		anim.setDuration(300);
+		v.startAnimation(anim);
+		
+		final int pos = position;
+		
+		anim.setAnimationListener(new AnimationListener() {
 
 			@Override
-			public boolean onTouch(View v, MotionEvent e) {
+			public void onAnimationEnd(Animation animation) {
+				//data.remove(pos);
+				adapterEditable.removeItem(pos);
+				adapterEditable.notifyDataSetChanged();
 				
-				LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp2.setMargins(0, 0, (int) e.getX(), 0);
-                v.setLayoutParams(lp2);
-				
-				return false;
 			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {}
+
+			@Override
+			public void onAnimationStart(Animation animation) {}
 			
 		});
 		
-		Toast.makeText(getApplicationContext(), "111", 20).show();
+		//Toast.makeText(getApplicationContext(), "111", 20).show();
 
 	}
 	

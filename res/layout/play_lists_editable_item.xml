@@ -2,14 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="40dp" >
+    android:minHeight="40dp" 
+    android:orientation="horizontal">
     
 	<EditText android:id="@+id/play_list_name_editable"
-	    android:layout_width="match_parent"
+	    android:layout_width="0dp"
 	    android:layout_height="wrap_content"
-	    android:inputType="text"
-	    android:layout_marginRight="30dp"/>
+	    android:layout_weight="8"
+	    android:inputType="none"/>
 	
+	<TextView android:id="@+id/delc"
+	    android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="2"
+		android:text="delete"/>
 
 		
 </LinearLayout>
