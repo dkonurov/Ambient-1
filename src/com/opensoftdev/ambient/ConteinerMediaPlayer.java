@@ -42,7 +42,7 @@ public class ConteinerMediaPlayer extends Service {
         }
     }
 	
-	ConteinerMediaPlayer(){
+	public ConteinerMediaPlayer(){
 		select = 0;
 		lastPlayer = 0;
 		super.onCreate();
@@ -217,6 +217,10 @@ public class ConteinerMediaPlayer extends Service {
 	public ConteinerMediaPlayer getService() {
 		// TODO Auto-generated method stub
 		return this;
+	}
+	
+	public Integer getSelect() {
+		return select;
 	}
 			
 }

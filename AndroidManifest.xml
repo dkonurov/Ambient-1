@@ -24,7 +24,7 @@
         </activity>
         <activity android:name="SettingsActivity"/>
         <activity android:name="PlayListsActivity"/>
-        <service android:name="namespace.ConteinerMediaPlayer"/>
+        <service android:name="ConteinerMediaPlayer"/>
     </application>
 
 </manifest>
