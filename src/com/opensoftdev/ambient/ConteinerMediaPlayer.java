@@ -11,6 +11,7 @@ package com.opensoftdev.ambient;
 
 import java.util.ArrayList;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,28 +26,27 @@ import android.widget.TextView;
 
 
 
-public class ConteinerMediaPlayer extends Service {
-	
-	private ArrayList <CustomMediaPlayer> conteinerMediaPlayer = new ArrayList <CustomMediaPlayer> ();
-	private ArrayList <TextView> conteinerTextView = new ArrayList <TextView> ();
-	private ArrayList <SeekBar> conteinerSeekBar = new ArrayList <SeekBar> ();
-	private int select;
-	private int lastPlayer;
-	private ArrayList <Integer> isPlaying = new ArrayList <Integer> ();
-	private boolean mSetMulti = true;
+public class ConteinerMediaPlayer {
+
+	public ArrayList <CustomMediaPlayer> conteinerMediaPlayer = new ArrayList <CustomMediaPlayer> ();
+	public ArrayList <TextView> conteinerTextView = new ArrayList <TextView> ();
+	public ArrayList <SeekBar> conteinerSeekBar = new ArrayList <SeekBar> ();
+	public int select;
+	public int lastPlayer;
+	public ArrayList <Integer> isPlaying = new ArrayList <Integer> ();
+	public boolean mSetMulti = true;
 	private final IBinder mBinder = new LocalBinder();
+	
+	public ConteinerMediaPlayer() {
+		select = 0;
+		lastPlayer = 0;
+	}
 	
 	public class LocalBinder extends Binder {
         ConteinerMediaPlayer getService() {
             return ConteinerMediaPlayer.this;
         }
     }
-	
-	public ConteinerMediaPlayer(){
-		select = 0;
-		lastPlayer = 0;
-		super.onCreate();
-	}
 
 	
 	public void addView(final CustomMediaPlayer player) {
@@ -105,7 +105,7 @@ public class ConteinerMediaPlayer extends Service {
 		if (mSetMulti) {
 			mSetMulti = false;
 		}
-		for (int i =0; i<=select;i++) {
+		for (int i =0; i < select;i++) {
 			if (conteinerMediaPlayer.get(i).isPlaying()) {
 				conteinerMediaPlayer.get(i).stop();
 				conteinerTextView.get(i).setTextColor(Color.BLACK);
@@ -114,7 +114,7 @@ public class ConteinerMediaPlayer extends Service {
 	}
 	
 	public void resetVolume() {
-		for (int i = 0; i <= select; i++) {
+		for (int i = 0; i < select; i++) {
 			conteinerMediaPlayer.get(i).setVolume(0.5f);
 			conteinerSeekBar.get(i).setProgress(50);
 		}
@@ -201,22 +201,13 @@ public class ConteinerMediaPlayer extends Service {
 		}
 	}
 	
+	public boolean getMulti () {
+		return mSetMulti;
+	}
+	
 	public String getString() {
 		return null;
 		
-	}
-
-
-	@Override
-	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
-		return mBinder;
-	}
-
-
-	public ConteinerMediaPlayer getService() {
-		// TODO Auto-generated method stub
-		return this;
 	}
 	
 	public Integer getSelect() {

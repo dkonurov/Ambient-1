@@ -1,6 +1,9 @@
 package com.opensoftdev.ambient;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -13,30 +16,17 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
-public class SettingsActivity<LocalBinder> extends Activity implements OnClickListener, OnCheckedChangeListener {
+public class SettingsActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 	
 	private Button closeSettings;
 	private ToggleButton setMulti;
-	private ConteinerMediaPlayer conteiner;
+	public ConteinerMediaPlayer conteiner = MainActivity.conteiner;
 	private Service service;
-	ServiceConnection mp3PlayerServiceConntection = new ServiceConnection() {
-
-		@Override
-		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-			// TODO Auto-generated method stub
-			conteiner = ((ConteinerMediaPlayer.LocalBinder) arg1).getService();
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	};
+	private Intent intent;
 	
 	protected void onCreate(Bundle savedState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -45,12 +35,14 @@ public class SettingsActivity<LocalBinder> extends Activity implements OnClickLi
 		getWindow().getAttributes().windowAnimations = R.style.SettingsAnimation;
 		
 		closeSettings = (Button) findViewById(R.id.close_settings);
-		closeSettings.setOnClickListener(this);
-		Intent intent = new Intent(this, ConteinerMediaPlayer.class);
-		bindService(intent, mp3PlayerServiceConntection, BIND_AUTO_CREATE);
-		Log.v("conteiner", conteiner+"");
+		closeSettings.setOnClickListener(this); 
+		
 		setMulti = (ToggleButton) findViewById(R.id.multi_set);
+		setMulti.setChecked(conteiner.getMulti());
 		setMulti.setOnCheckedChangeListener(this);
+		
+		LinearLayout resetVolume = (LinearLayout) findViewById(R.id.resetVolume);
+		resetVolume.setOnClickListener(this);
 		
 	}
 
@@ -60,7 +52,11 @@ public class SettingsActivity<LocalBinder> extends Activity implements OnClickLi
 		case R.id.close_settings:
 			finish();
 			break;
+		case R.id.resetVolume:
+			conteiner.resetVolume();
+			break;
 		}
+		
 	}
 
 	@Override

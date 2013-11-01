@@ -1,34 +1,39 @@
 package com.opensoftdev.ambient;
 
 import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcelable;
 import android.provider.SyncStateContract.Constants;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.agimind.widget.ExpandableAdapter;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-	private ExpandableListView mainList;
+	private ListView mainList;
 	
-	private MainListAdapter mainListAdapter;
+	private MainListAdapter adapter;
 	
 	private int openedView = -1;
 	
-	private ConteinerMediaPlayer conteiner;
+	static public ConteinerMediaPlayer conteiner;
+	
+	private Intent intent;
 	
 	Animation anim;
 	
@@ -49,54 +54,26 @@ public class MainActivity extends Activity implements OnClickListener {
         currentPlayList = (TextView) findViewById(R.id.list_name);
         playAndStop = (Button) findViewById(R.id.buttonPress);
         
+        conteiner = new ConteinerMediaPlayer();
+        
         settings.setOnClickListener(this);
         playLists.setOnClickListener(this);
         playAndStop.setOnClickListener(this);
         
-        mainList = (ExpandableListView) findViewById(R.id.main_list);
-        mainListAdapter = new MainListAdapter(this, data);
-        mainList.setAdapter(mainListAdapter);
-        mainList.setGroupIndicator(null);
+        mainList = (ListView) findViewById(R.id.main_list);
+        adapter = new MainListAdapter(this, data, conteiner);
         
-
+        ListAdapter listAdapter = new ExpandableAdapter(this, adapter, R.id.expand, R.id.track_volume);
+        mainList.setAdapter(listAdapter);
         
-        anim = AnimationUtils.loadAnimation(this, R.anim.down_up);
-        
-        mainList.setOnGroupClickListener(new OnGroupClickListener() {
-
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v,
-					int groupPosition, long id) {
-				
-				
-				return false;
-			}
-        	
-        });
-        mainList.setOnGroupExpandListener(new OnGroupExpandListener() {
-
-			@Override
-			public void onGroupExpand(int groupPosition) {
-				
-				if (openedView != groupPosition && openedView != -1) {
-					mainList.collapseGroup(openedView);
-				}
-				openedView = groupPosition;
-				
-			}
-        });
     }
 
 	@Override
 	public void onClick(View v) {
 		Intent activity;
-		conteiner = MainListAdapter.getConteiner();
-		startService(new Intent(this, ConteinerMediaPlayer.class));
 		switch (v.getId()){
 		case R.id.settings:
-			activity = new Intent(this, SettingsActivity.class);
-			ArrayList <ConteinerMediaPlayer> myList = new ArrayList <ConteinerMediaPlayer> ();
-			myList.add(conteiner);
+			activity = new Intent(MainActivity.this, SettingsActivity.class);
 			startActivity(activity);
 			overridePendingTransition(R.anim.down_up, R.anim.none);
 			break;
@@ -106,7 +83,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			overridePendingTransition(R.anim.left_right, R.anim.none);
 			break;
 		case R.id.buttonPress:
-			conteiner = MainListAdapter.getConteiner();
 			conteiner.playingAndStop(!conteiner.isPlaying());
 		}
 	}
