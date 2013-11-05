@@ -16,10 +16,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Animation;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.agimind.widget.ExpandableAdapter;
 
@@ -66,6 +69,15 @@ public class MainActivity extends Activity implements OnClickListener {
         ListAdapter listAdapter = new ExpandableAdapter(this, adapter, R.id.expand, R.id.track_volume);
         mainList.setAdapter(listAdapter);
         
+        mainList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+					long arg3) {
+				Toast.makeText(getApplicationContext(), ((TextView)v.findViewById(R.id.track_name)).getText(),100).show();
+			}
+        	
+        });
     }
 
 	@Override

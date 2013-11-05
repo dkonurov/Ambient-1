@@ -1,13 +1,11 @@
 package com.opensoftdev.ambient;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -16,14 +14,12 @@ public class MainListAdapter extends BaseAdapter {
 	private Context context;
 	private String[] data;
 	private int lastPosition;
-	private Button buttons[];
 	private int select = 0;
 	private static ConteinerMediaPlayer conteiner;
 	
 	MainListAdapter(Context c, String[] data, ConteinerMediaPlayer _conteiner){
 		this.context = c;
 		this.data = data;
-		buttons = new Button[data.length];
 		conteiner = _conteiner;
 	}
 

@@ -95,12 +95,14 @@ public class SettingsActivity extends Activity implements OnClickListener, OnChe
 				} else {
 					conteiner.offMulti();
 				}
+				break;
 			case R.id.auto_lock:
 				if (autoLock.isChecked()) {
 					wakeLock.acquire();
 				} else {
 					wakeLock.release();				
 				}
+				break;
 		}
 	}
 	
