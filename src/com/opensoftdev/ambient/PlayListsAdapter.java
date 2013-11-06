@@ -4,24 +4,18 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PlayListsAdapter extends BaseAdapter implements View.OnTouchListener {
 	
@@ -59,6 +53,7 @@ public class PlayListsAdapter extends BaseAdapter implements View.OnTouchListene
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
+		
 		LayoutInflater inflater;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (!editable) {
@@ -72,9 +67,6 @@ public class PlayListsAdapter extends BaseAdapter implements View.OnTouchListene
 			EditText playListName = (EditText) view.findViewById(R.id.play_list_name_editable);
 	        playListName.setText(data.get(position));
 	        playListName.setBackgroundDrawable(null);
-	        
-	        //TextView asd = (TextView) view.findViewById(R.id.delc);
-	        //asd.setOnTouchListener(this);
 	        
 	        TextView asd = new TextView(context);
 	        asd.setOnTouchListener(this);
@@ -93,7 +85,7 @@ public class PlayListsAdapter extends BaseAdapter implements View.OnTouchListene
 	        playListName.setFocusable(false);
 	        playListName.setOnTouchListener(this);
 		}
-		
+
 		return view;
 	}
 	
@@ -124,5 +116,4 @@ public class PlayListsAdapter extends BaseAdapter implements View.OnTouchListene
 		int action = event.getAction();
 		return false;
 	}
-	
 }
