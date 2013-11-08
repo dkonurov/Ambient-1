@@ -1,9 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#0099cc">
+    android:orientation="vertical" >
+    
+    <LinearLayout android:id="@+id/bg1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+    
+    <LinearLayout android:id="@+id/bg2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
     
     <RelativeLayout android:id="@+id/header"
         android:layout_width="match_parent"
@@ -52,7 +66,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/buttonPress"
+            android:id="@+id/b1"
             android:layout_width="0dp"
             android:textColor="#ffffff"
             android:layout_height="wrap_content"
@@ -60,7 +74,7 @@
             android:text="1" />
 
         <Button
-            android:id="@+id/buttonDeadlift"
+            android:id="@+id/b2"
             android:layout_width="0dp"
             android:textColor="#ffffff"
             android:layout_height="wrap_content"
@@ -68,7 +82,7 @@
             android:text="2" />
 
         <Button
-            android:id="@+id/buttonSquat"
+            android:id="@+id/b3"
             android:layout_width="0dp"
             android:textColor="#ffffff"
             android:layout_height="wrap_content"
@@ -76,12 +90,14 @@
             android:text="3" />
         
         <Button
-            android:id="@+id/buttonSquat"
+            android:id="@+id/b4"
             android:layout_width="0dp"
             android:textColor="#ffffff"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="4" />
     </LinearLayout>
+    
+    </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

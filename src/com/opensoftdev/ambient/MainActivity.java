@@ -40,11 +40,23 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	Animation anim;
 	
-	/** Buttons **/
-	private Button settings, playLists, playAndStop;
+	/** Buttons header **/
+	private Button settings, playLists;
+	
+	/** Button footer **/
+	private Button playAndStop;
+	
 	private TextView currentPlayList;
 	
 	String data[] = {"8=э", "8==э", "8===э", "8====э"};
+	
+	@Override
+    protected void onResume() {
+		super.onResume();
+		
+		
+		
+	}
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +67,7 @@ public class MainActivity extends Activity implements OnClickListener {
         settings = (Button) findViewById(R.id.settings);
         playLists = (Button) findViewById(R.id.play_lists);
         currentPlayList = (TextView) findViewById(R.id.list_name);
-        playAndStop = (Button) findViewById(R.id.buttonPress);
+        playAndStop = (Button) findViewById(R.id.b1);
         
         conteiner = new ConteinerMediaPlayer();
         
@@ -94,7 +106,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			startActivity(activity);
 			overridePendingTransition(R.anim.left_right, R.anim.none);
 			break;
-		case R.id.buttonPress:
+		case R.id.b1:
 			conteiner.playingAndStop(!conteiner.isPlaying());
 		}
 	}
