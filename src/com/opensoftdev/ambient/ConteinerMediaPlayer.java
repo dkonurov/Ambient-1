@@ -28,66 +28,88 @@ import android.widget.TextView;
 
 public class ConteinerMediaPlayer {
 
+	/** ArrayList for conteiner, because don't know previously how many be CustomMediaPlayer, TextView and SeekBar */
 	public ArrayList <CustomMediaPlayer> conteinerMediaPlayer = new ArrayList <CustomMediaPlayer> ();
 	public ArrayList <TextView> conteinerTextView = new ArrayList <TextView> ();
 	public ArrayList <SeekBar> conteinerSeekBar = new ArrayList <SeekBar> ();
+	
+	/** select is selector for conteiner, lastPlayer save number, isPlaying save number's playing player  */
 	public int select;
 	public int lastPlayer;
 	public ArrayList <Integer> isPlaying = new ArrayList <Integer> ();
+
+	/** check multi player  */
 	public boolean mSetMulti = true;
-	private final IBinder mBinder = new LocalBinder();
 	
+	/**
+	 * constructor class start selector
+	 */
 	public ConteinerMediaPlayer() {
+		
 		select = 0;
 		lastPlayer = 0;
 	}
 	
-	public class LocalBinder extends Binder {
-        ConteinerMediaPlayer getService() {
-            return ConteinerMediaPlayer.this;
-        }
-    }
-
-	
+	/**
+	 * add player to conteiner
+	 * @param CustomMediaPlayer player
+	 */
 	public void addView(final CustomMediaPlayer player) {
+		
 		conteinerMediaPlayer.add(player);		
 		select++;
 	}
 	
+	/**
+	 * set MultiPlayer is true
+	 */
 	public void setMulti() {
+		
 		if (!mSetMulti) {
 			mSetMulti = true;
 		}
 		
 	}
 	
+	/**
+	 * set TextView for current player
+	 * @param TextView textview
+	 * @param int id
+	 */
 	public void setTextView(final TextView textview, final int id) {
+		
 		if (conteinerTextView.size()-1 < id) {
 			conteinerTextView.add(textview);
 		} else {
 			conteinerTextView.set(id, textview);
 		}
+		
 		textview.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
+				
 				if (conteinerMediaPlayer.get(id).isPlaying()) {
 					conteinerMediaPlayer.get(id).stop();
+					
 					for (int i = 0, length = isPlaying.size(); i < length; i++) {
 						if (isPlaying.get(i) == id) {
 							isPlaying.remove(i);
 							break;
 						}
 					}
+					
 					textview.setTextColor(Color.BLACK);
 				} else {
+					
 					if (!mSetMulti) {
+						
 						if (conteinerMediaPlayer.get(lastPlayer).isPlaying()) {
 							conteinerMediaPlayer.get(lastPlayer).stop();
 							conteinerTextView.get(lastPlayer).setTextColor(Color.BLACK);
 						}
 					}
+					
 					conteinerMediaPlayer.get(id).start();
 					lastPlayer = conteinerMediaPlayer.get(id).getNumber();
 					isPlaying.add(lastPlayer);
@@ -96,32 +118,54 @@ public class ConteinerMediaPlayer {
 			}
 			
 		});
+		
 		if (conteinerMediaPlayer.get(id).isPlaying()) {
 			textview.setTextColor(Color.GREEN);
 		}
+		
 	}
 	
+	/**
+	 * off Multi player and stop all players into continer
+	 */
 	public void offMulti() {
+		
 		if (mSetMulti) {
 			mSetMulti = false;
 		}
+		
 		for (int i =0; i < select;i++) {
+			
 			if (conteinerMediaPlayer.get(i).isPlaying()) {
 				conteinerMediaPlayer.get(i).stop();
 				conteinerTextView.get(i).setTextColor(Color.BLACK);
 			}
+			
 		}
+		
 	}
 	
+	/**
+	 * all volume set 50%
+	 */
 	public void resetVolume() {
+		
 		for (int i = 0; i < select; i++) {
 			conteinerMediaPlayer.get(i).setVolume(0.5f);
 			conteinerSeekBar.get(i).setProgress(50);
 		}
+		
 	}
 	
+	/**
+	 * set for current player seekBar for control volume
+	 * @param int id
+	 * @param SeekBar _bar
+	 */
 	public void setSeekBar(final int id, SeekBar _bar) {
+		
 		conteinerSeekBar.add(_bar);
+		
 		_bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
@@ -148,25 +192,44 @@ public class ConteinerMediaPlayer {
 		_bar.setProgress(volume);
 	}
 	
+	/**
+	 * Destroy player and delete from Conteiner seekBar, textView
+	 * @param int id
+	 */
 	protected void Destroy(int id) {
+		
 		conteinerMediaPlayer.get(id).Destroy();
 		conteinerMediaPlayer.remove(id);
 		conteinerSeekBar.remove(id);
 		conteinerTextView.remove(id);
 		select--;
+		
 	}
 	
+	/**
+	 * if already  set player return false else return true
+	 * @param int id
+	 * @return boolean
+	 */
 	public boolean isSet(int id) {
+		
 		if (conteinerMediaPlayer.size()-1 < id) {
 			return false;
-		}
-		else {
+		} else {
 			return true;
 		}
+		
 	}
 	
+	/**
+	 * if check true start music else stop music
+	 * @param boolean check
+	 */
+	
 	public void playingAndStop(boolean check) {
+		
 		if (!mSetMulti) {
+			
 			if (check) {
 				conteinerMediaPlayer.get(lastPlayer).start();
 				conteinerTextView.get(lastPlayer).setTextColor(Color.GREEN);
@@ -187,32 +250,37 @@ public class ConteinerMediaPlayer {
 				}
 			}
 		}
+		
 	}
 	
+	/**
+	 * if playing reutrn true else return false
+	 * @return boolean
+	 */
 	public boolean isPlaying() {
+		
 		if (!mSetMulti) {
 			return conteinerMediaPlayer.get(lastPlayer).isPlaying();
 		} else {
 			for (int i = 0; i < select; i++) {
+				
 				if (conteinerMediaPlayer.get(i).isPlaying()) {
 					return true;
 				}
+				
 			}
 			return false;
 		}
-	}
-	
-	public boolean getMulti () {
-		return mSetMulti;
-	}
-	
-	public String getString() {
-		return null;
 		
 	}
 	
-	public Integer getSelect() {
-		return select;
-	}
-			
+	/**
+	 * get mSetMulti
+	 * @return boolean mSetMulti
+	 */
+	public boolean getMulti () {
+		
+		return mSetMulti;
+		
+	}		
 }

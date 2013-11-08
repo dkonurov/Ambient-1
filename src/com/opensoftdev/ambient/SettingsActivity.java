@@ -11,18 +11,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import android.widget.ToggleButton;
-import android.app.Dialog;
-import android.content.DialogInterface;
 
 public class SettingsActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 	
 	private Button closeSettings;
-	private ToggleButton setMulti;
-	private ToggleButton autoLock;
+	private CheckBox setMulti;
+	private CheckBox autoLock;
 	
 	public DialogInterface.OnClickListener dialogClickListener;
 	
@@ -40,11 +38,11 @@ public class SettingsActivity extends Activity implements OnClickListener, OnChe
 		closeSettings = (Button) findViewById(R.id.close_settings);
 		closeSettings.setOnClickListener(this); 
 		
-		setMulti = (ToggleButton) findViewById(R.id.multi_set);
+		setMulti = (CheckBox) findViewById(R.id.multi_set);
 		setMulti.setChecked(conteiner.getMulti());
 		setMulti.setOnCheckedChangeListener(this);
 		
-		autoLock = (ToggleButton) findViewById(R.id.auto_lock);
+		autoLock = (CheckBox) findViewById(R.id.auto_lock);
 		autoLock.setChecked(false);
 		autoLock.setOnCheckedChangeListener(this);
 		
@@ -90,29 +88,35 @@ public class SettingsActivity extends Activity implements OnClickListener, OnChe
 		// TODO Auto-generated method stub
 		switch(arg0.getId()) {
 			case R.id.multi_set:
+				
 				if (arg1) {
 					conteiner.setMulti();
 				} else {
 					conteiner.offMulti();
 				}
+				
 				break;
 			case R.id.auto_lock:
+				
 				if (autoLock.isChecked()) {
 					wakeLock.acquire();
 				} else {
 					wakeLock.release();				
 				}
+				
 				break;
 		}
 	}
 	
 	protected Dialog onCreateDialog(int id) {
+		
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		adb.setTitle("Do you want realy?");
 		adb.setMessage("Do you want realy?");
 		adb.setPositiveButton("yes", dialogClickListener);
 		adb.setNegativeButton("no", dialogClickListener);
 		return adb.create();
+		
 	}
 	
 }

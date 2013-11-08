@@ -27,7 +27,7 @@
 	    	android:layout_centerVertical="true"
 	    	android:text="Multi tracks playing enable:"/>
 
-        <ToggleButton
+        <CheckBox
             android:id="@+id/multi_set"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
 	    	android:layout_centerVertical="true"
 	    	android:text="Автосмена фона"/>
 
-        <ToggleButton
+        <CheckBox
             android:id="@+id/toggleButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
 	    	android:layout_centerVertical="true"
 	    	android:text="Prevent auto lock:"/>
 
-        <ToggleButton
+        <CheckBox
             android:id="@+id/auto_lock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class PlayListsActivity extends Activity implements OnClickListener, OnItemClickListener {
 	
@@ -64,14 +63,14 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 			break;
 		case R.id.edit_play_lists:
 			if (isFirstClick) {
-				editPlayLists.setText("done");			
-				adapterEditable = new PlayListsAdapter(this, data, true);
+				editPlayLists.setText("done");
+				adapterEditable = new PlayListsAdapter(this, data, true, editPlayLists);
 				SwipeDismissListViewTouchListener listener = new SwipeDismissListViewTouchListener(playLists,
 						new SwipeDismissListViewTouchListener.OnDismissCallback() {
 							
 							@Override
 							public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-								// TODO Auto-generated method stub
+
 								 for (int position : reverseSortedPositions) {
 	                                    adapterEditable.removeItem(position);
 	                                }
@@ -84,6 +83,7 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 				isFirstClick = false;
 			} else {
 				editPlayLists.setText("edit");
+				data = adapterEditable.getData();
 				adapterNotEditable = new PlayListsAdapter(this, data, false);
 				playLists.setAdapter(adapterNotEditable);
 				playLists.setOnItemClickListener(null);
@@ -97,7 +97,6 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 	
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-		TextView asd = (TextView) v.findViewById(R.id.play_list_name);
 		
 		TranslateAnimation anim = new TranslateAnimation(0,-v.getWidth(),0,0);
 		anim.setDuration(300);
@@ -109,7 +108,7 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				//data.remove(pos);
+				
 				adapterEditable.removeItem(pos);
 				adapterEditable.notifyDataSetChanged();
 				
@@ -122,8 +121,6 @@ public class PlayListsActivity extends Activity implements OnClickListener, OnIt
 			public void onAnimationStart(Animation animation) {}
 			
 		});
-		
-		//Toast.makeText(getApplicationContext(), "111", 20).show();
 
 	}
 	
